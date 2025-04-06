@@ -26,7 +26,7 @@ Este projeto de gerenciamento de gastos tem como objetivo ser uma ferramenta per
 Diagrama de Classes:
 
 Diagrama de Casos de Uso:
-![Diagrama de caso de uso](imagens/Caso1-Usuario_Novo.png)
+![Diagrama de caso de uso](imagens\Caso1-Novo_Usuario.png)
 ![Diagrama de caso de uso](imagens/Caso2-Usuario_Existente.png)
 
 # 3. Estrutura de Banco de Dados:
