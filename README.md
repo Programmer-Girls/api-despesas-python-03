@@ -20,3 +20,15 @@ Este projeto de gerenciamento de gastos tem como objetivo ser uma ferramenta per
 ## Objetivo da API:
 
 - Controle de gastos pessoais.
+
+# 2. Arquitetura do Sistema:
+
+Diagrama de Classes:
+
+Diagrama de Casos de Uso:
+![Diagrama de caso de uso](imagens/Caso1-Usuario_Novo.png)
+![Diagrama de caso de uso](imagens/Caso2-Usuario_Existente.png)
+
+# 3. Estrutura de Banco de Dados:
+
+Diagrama de Relacionamento de Entidades:
