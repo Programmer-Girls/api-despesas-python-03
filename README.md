@@ -23,7 +23,7 @@ Este projeto de gerenciamento de gastos tem como objetivo ser uma ferramenta per
 # 2. Arquitetura do Sistema:
 
 Diagrama de Classes:
-![Diagrama de Classes](imagens/Classe.png)
+![Diagrama de Classes](imagens/Diagrama_de_Classes_API.png)
 
 Diagrama de Caso de Uso:
 ![Diagrama de Caso de Uso](imagens/Caso1-Novo_Usuario.png)
