@@ -32,4 +32,4 @@ Diagrama de Caso de Uso:
 # 3. Estrutura de Banco de Dados:
 
 Diagrama de Relacionamento de Entidades:
-![Diagrama de Relacionamento](imagens/Relacionamento.png)
+![Diagrama de Relacionamento](imagens/Diagrama MER.png)
