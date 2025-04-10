@@ -39,12 +39,12 @@ Diagrama de Relacionamento de Entidades:
 
 Documentação dos principais endpoints (incluindo método HTTP, URL, parâmetros, e exemplo de resposta).
 
-| Método | URL                           | Descrição          |
-| ------ | ----------------------------- | ------------------ |
-| POST   | http://localhost:5000/usuario | Cadastra o usuário |
-| GET    | http://localhost:5000/usuario | Lista usuários     |
-| PUT    |                               | Atualiza o usuário |
-| DELETE |                               | Remove o usuário   |
+| Método | URL                              | Descrição          |
+| ------ | -------------------------------- | ------------------ |
+| POST   | http://localhost:5000/usuario    | Cadastra o usuário |
+| GET    | http://localhost:5000/usuario    | Lista usuários     |
+| PUT    | http://localhost:5000/usuario/id | Atualiza o usuário |
+| DELETE | http://localhost:5000/usuario/id | Remove o usuário   |
 
 # 5. Autenticação:
 
