@@ -36,7 +36,14 @@ Diagrama de Relacionamento de Entidades:
 
 # 4. EndPoints da API:
 
-Documentação dos principais endpoints (incluindo método HTTP, URL, parâmetros, e exemplo de resposta). Por exemplo:
+Documentação dos principais endpoints (incluindo método HTTP, URL, parâmetros, e exemplo de resposta).
+
+| Método | URL                           | Descrição          |
+| ------ | ----------------------------- | ------------------ |
+| POST   | http://localhost:8081/usuario | Cadastra o usuário |
+| GET    | http://localhost:8081/usuario | Lista o usuário    |
+| PUT    |                               | Atualiza o usuário |
+| DELETE |                               | Remove o usuário   |
 
 POST /usuario: Cria um usuario.
 
@@ -48,27 +55,26 @@ GET /usuario: Lista usuarios existentes.
 
 # 7. Como rodar o projeto:
 
-1- Inicia o ambiente virtual (venv)
-python3 -m venv venv
+1- Inicia o ambiente virtual (venv)\
+`python3 -m venv venv`
 
-2- Ativa o ambiente virtual
-Linux:
-source venv/bin/activate
-ou
-Windows:
-venv/Scripts/activate
+2- Ativa o ambiente virtual\
+Linux:\
+`source venv/bin/activate`\
+Windows:\
+`venv/Scripts/activate`
 
-3- Instala as dependências para o projeto
-pip install -r requirements.txt
+3- Instala as dependências para o projeto\
+`pip install -r requirements.txt`
 
-4- Define a variável de ambiente FLASK_APP com o valor app.py
-export FLASK_APP=app.py
-ou set FLASK_APP=app.py
+4- Define a variável de ambiente FLASK_APP com o valor app.py\
+`export FLASK_APP=app.py`
+ou `set FLASK_APP=app.py`
 
-5- Executa o flask
-flask run
+5- Executa o flask\
+`flask run`
 
-6- acesse o link pelo navegador
+6- acesse o link pelo navegador\
 http://127.0.0.1:5000/usuario
 
 # 8. Testes:
