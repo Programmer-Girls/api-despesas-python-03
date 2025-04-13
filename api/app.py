@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request, render_template
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from passlib.hash import bcrypt
-import bcrypt as bcrypt_lib
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from config import DATABASE_CONFIG
@@ -66,11 +65,11 @@ def create_app():
             # Verificar se a senha fornecida corresponde ao hash armazenado no banco de dados
             if bcrypt.verify(senha, user.senha):
                 access_token = create_access_token(identity=nome)
-                #return jsonify(access_token=access_token), 200
-                return render_template('sucesso.html')
+                return jsonify(access_token=access_token), 200
+                #return render_template('sucesso.html')
             else:
-                return render_template('falha.html')
-                #return jsonify({'msg': 'Senha incorreta'}), 401
+                #return render_template('falha.html')
+                return jsonify({'msg': 'Senha incorreta'}), 401
 
      # Criar usuário
     @app.route('/usuario', methods=['POST'])
@@ -81,11 +80,9 @@ def create_app():
             email = data['email']
             senha = data['senha']
 
-            # Hashear a senha
-            password_bytes = senha.encode('utf-8')
-            hashed_password_bytes = bcrypt_lib.hashpw(password_bytes, bcrypt_lib.gensalt())
-            hashed_password_str = hashed_password_bytes.decode('utf-8')
-
+            # Hashear a senha            
+            hashed_password_str = bcrypt.hash(senha)
+            
             new_user = Usuario(nome=nome, email=email, senha=hashed_password_str)
             db.session.add(new_user)
             db.session.commit()
@@ -98,25 +95,7 @@ def create_app():
             db.session.rollback()
             logging.error(f"Erro ao criar usuário: {e}")
             return jsonify({'message': 'error creating user'}), 500
-        password_bytes = senha.encode('utf-8')
-        hashed_password_bytes = bcrypt_lib.hashpw(password_bytes, bcrypt_lib.gensalt())
-        hashed_password_str = hashed_password_bytes.decode('utf-8')
-
-        # Criar uma nova instância do modelo Usuario
-        new_user = Register(nome=nome, senha=hashed_password_str)
-
-        # Adicionar o novo usuário à sessão do banco de dados
-        db.session.add(new_user)
-
-        try:
-            # Commit as alterações para o banco de dados
-            db.session.commit()
-            return jsonify({'msg': 'Usuário criado com sucesso'}), 201
-        except Exception as e:
-            # Em caso de erro ao salvar no banco de dados, fazer rollback
-            db.session.rollback()
-            return jsonify({'msg': f'Erro ao criar usuário no banco de dados: {str(e)}'}), 500
-
+           
 # ESTE TRECHO NÃO ESTÁ FUNCIONANDO AINDA
     @app.route('/protegido', methods=['GET'])
     @jwt_required()
@@ -149,6 +128,7 @@ def create_app():
                         usuario_objeto.email = body['email']
                     if 'senha' in body:
                         usuario_objeto.senha = body['senha']
+                        usuario_objeto.senha = bcrypt.hash(body['senha'])
 
                     db.session.commit()
                     return jsonify({'message': 'usuario updated successfully', 'usuario': usuario_objeto.json()}), 200
