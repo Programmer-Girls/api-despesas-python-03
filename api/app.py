@@ -1,9 +1,11 @@
-import os
-from flask import Flask, request, jsonify, g, make_response, render_template
-from flask_sqlalchemy import SQLAlchemy
-import logging
+from flask import Flask, jsonify, request, render_template
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
+from passlib.hash import bcrypt
 from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
 from config import DATABASE_CONFIG
+import os  # Import os module
+import logging
 
 # Carregar o arquivo .env
 load_dotenv()
@@ -34,26 +36,73 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{DATABASE_CONFIG['user']}:{DATABASE_CONFIG['password']}@{DATABASE_CONFIG['host']}:{DATABASE_CONFIG['port']}/{DATABASE_CONFIG['database']}"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Para evitar avisos
 
+    app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY', 'super-secret') # Configure a chave secreta JWT
+    jwt = JWTManager(app)
+
     # Inicializa o SQLAlchemy com a aplicação Flask
     db.init_app(app)
 
     # Cria as tabelas do banco de dados
     with app.app_context():
         db.create_all()
+#Login
+    @app.route('/', methods=['GET', 'POST'])
+    def login():
+        if request.method == 'GET':
+            return render_template('index.html')
+        elif request.method == 'POST':
+            nome = request.json.get('nome')
+            senha = request.json.get('senha')
+            if not nome or not senha:
+                return jsonify({'msg': 'nome e senha são obrigatórios'}), 400
 
-    # Criar usuário
+            # Buscar o usuário no banco de dados pelo username
+            user = Usuario.query.filter_by(nome=nome).first()
+
+            if not user:
+                return jsonify({'msg': 'Usuário não existe'}), 401
+
+            # Verificar se a senha fornecida corresponde ao hash armazenado no banco de dados
+            if bcrypt.verify(senha, user.senha):
+                access_token = create_access_token(identity=nome)
+                return jsonify(access_token=access_token), 200
+                #return render_template('sucesso.html')
+            else:
+                #return render_template('falha.html')
+                return jsonify({'msg': 'Senha incorreta'}), 401
+
+     # Criar usuário
     @app.route('/usuario', methods=['POST'])
     def create_user():
         try:
             data = request.get_json()
-            new_user = Usuario(nome=data['nome'], email=data['email'], senha=data['senha'])
+            nome = data['nome']
+            email = data['email']
+            senha = data['senha']
+
+            # Hashear a senha            
+            hashed_password_str = bcrypt.hash(senha)
+            
+            new_user = Usuario(nome=nome, email=email, senha=hashed_password_str)
             db.session.add(new_user)
             db.session.commit()
             return jsonify({'message': 'user created'}), 201
+        except KeyError as e:
+            db.session.rollback()
+            logging.error(f"Erro ao criar usuário (dados ausentes): {e}")
+            return jsonify({'message': f'missing data: {e}'}), 400
         except Exception as e:
-            db.session.rollback()  # Reverte a transação em caso de erro
+            db.session.rollback()
             logging.error(f"Erro ao criar usuário: {e}")
             return jsonify({'message': 'error creating user'}), 500
+           
+# ESTE TRECHO NÃO ESTÁ FUNCIONANDO AINDA
+    @app.route('/protegido', methods=['GET'])
+    @jwt_required()
+    def protegido():
+        current_user = get_jwt_identity()
+        return render_template('sucesso.html')
+        # return jsonify(logado_como=current_user), 200
 
     # Lista todos os usuários
     @app.route('/usuario', methods=['GET'])
@@ -79,6 +128,7 @@ def create_app():
                         usuario_objeto.email = body['email']
                     if 'senha' in body:
                         usuario_objeto.senha = body['senha']
+                        usuario_objeto.senha = bcrypt.hash(body['senha'])
 
                     db.session.commit()
                     return jsonify({'message': 'usuario updated successfully', 'usuario': usuario_objeto.json()}), 200
@@ -107,6 +157,6 @@ def create_app():
 
     return app
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
