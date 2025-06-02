@@ -63,7 +63,7 @@ def atualizar(id):
        print(f"Erro ao atualizar despesa: {str(e)}")
        return jsonify(msg='Erro ao atualizar despesa'), 500
 
-@despesa_bp.route('/listar')
+@despesa_bp.route('/')
 @jwt_required()
 def listar():
     try:

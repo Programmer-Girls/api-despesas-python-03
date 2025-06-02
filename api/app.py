@@ -1,23 +1,21 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from dotenv import load_dotenv
-from config import DATABASE_CONFIG
+from config import SQLALCHEMY_DATABASE_URI
 from extensions import db, jwt
 from blueprints.usuario.usuario import usuario_bp
 from blueprints.despesa.despesa import despesa_bp
+from blueprints.categoria.categoria import categoria_bp, categorias_padrao
 import os  # Import os module
 
 # Carregar o arquivo .env
 load_dotenv()
 
-# Obter string de conexão da variável de ambiente
-connection_string = os.getenv('DATABASE_URL')
-
 def create_app():
     app = Flask(__name__)
 
     # Configura a URI do banco de dados para o SQLAlchemy
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{DATABASE_CONFIG['user']}:{DATABASE_CONFIG['password']}@{DATABASE_CONFIG['host']}:{DATABASE_CONFIG['port']}/{DATABASE_CONFIG['database']}"
+    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Para evitar avisos
 
     app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY', 'super-secret') # Configure a chave secreta JWT
@@ -27,9 +25,14 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
 
+    with app.app_context():
+        db.create_all()
+        categorias_padrao()
+
+
     app.register_blueprint(despesa_bp, url_prefix='/despesa')
+    app.register_blueprint(categoria_bp, url_prefix='/categoria')
     app.register_blueprint(usuario_bp)
-    #app.register_blueprint(categoria_bp)
 
     return app
 

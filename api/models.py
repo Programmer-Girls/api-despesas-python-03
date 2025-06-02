@@ -20,11 +20,16 @@ class Usuario(db.Model):
 class Categoria(db.Model):
      id = db.Column(db.Integer, primary_key=True)
      nome = db.Column(db.String(80), nullable=False)
+     id_usuario = db.Column(db.Integer, db.ForeignKey(Usuario.id), nullable=True)
+
+     # Relacionamento
+     usuario = db.relationship('Usuario', backref='categorias', lazy=True)
 
      def json(self):
           return {
                'id': self.id,
-               'nome': self.nome}
+               'nome': self.nome,
+               'usuario': 'Sistema' if self.usuario is None else self.usuario.nome}
     
 # Modelo Despesa
 class Despesa(db.Model):

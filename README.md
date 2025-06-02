@@ -41,16 +41,20 @@ Diagrama de Relacionamento de Entidades:
 
 Documentação dos principais endpoints (incluindo método HTTP, URL, parâmetros, e exemplo de resposta).
 
-| Método | URL                                        | Descrição          |
-| ------ | ------------------------------------------ | ------------------ |
-| POST   | http://localhost:5000/usuario              | Cadastra o usuário |
-| GET    | http://localhost:5000/usuario              | Lista usuários     |
-| PUT    | http://localhost:5000/usuario/id           | Atualiza o usuário |
-| DELETE | http://localhost:5000/usuario/id           | Remove o usuário   |
-| POST   | http://localhost:5000/despesa/novadespesa  | Cria nova despesa  |
-| GET    | http://localhost:5000/despesa/listar       | Lista despesas     |
-| PUT    | http://localhost:5000/despesa/atualizar/id | Atualiza a despesa |
-| DELETE | http://localhost:5000/despesa/deletar/id   | Remove a despesa   |
+| Método | URL                                           | Descrição           |
+| ------ | --------------------------------------------- | ------------------  |
+| POST   | http://localhost:5000/usuario                 | Cadastra o usuário  |
+| GET    | http://localhost:5000/usuario                 | Lista usuários      |
+| PUT    | http://localhost:5000/usuario/id              | Atualiza o usuário  |
+| DELETE | http://localhost:5000/usuario/id              | Remove o usuário    |
+| POST   | http://localhost:5000/despesa/novadespesa     | Cria nova despesa   |
+| GET    | http://localhost:5000/despesa/listar          | Lista despesas      |
+| PUT    | http://localhost:5000/despesa/atualizar/id    | Atualiza a despesa  |
+| DELETE | http://localhost:5000/despesa/deletar/id      | Remove a despesa    |
+| POST   | http://localhost:5000/categoria/novacategoria | Cria nova categoria |
+| GET    | http://localhost:5000/categoria/              | Lista categorias    |
+| PUT    | http://localhost:5000/categoria/atualizar/id  | Atualiza a categoria|
+| DELETE | http://localhost:5000/categoria/deletar/id    | Remove a categoria  |
 
 # 5. Autenticação:
 
